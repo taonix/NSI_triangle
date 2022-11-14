@@ -1,58 +1,94 @@
+from turtle import *
 from math import *
 from random import randint
-from time import sleep
-from turtle import *
+import time
 
-colormode(255)
+colormode(255)  # Configure le mode de codage pour les couleurs
+speed(0)  # Défini la vitesse d'execution du programme
 
-a = 100
-n = 4
+def trapeze(a):
+    """Fonction qui crée un trapèze
 
-#hideturtle()
+    :param int a: taille du côté d'un triangle (doit être pair)
+    :return: Un trapèze
+    """
 
-def petit_trapezez(a):
-    fillcolor((randint(0, 255), randint(0, 255), randint(0, 255)))
-    begin_fill()
-    forward(a * 2)
-    left(120)
+    fillcolor((randint(0, 255), randint(0, 255), randint(0, 255)))  # défini la couleur de remplissage
+    begin_fill()  # Commence le remplissage
+
     forward(a)
-    for i in range(2):
-        left(60)
-        forward(a)
-    end_fill()
     left(120)
 
-def trapeze(a, n):
-    if n == 1:
-        petit_trapezez(a)
-    #elif n > 1:
+    forward(a)
+    left(60)
+
+    forward(a)
+    left(60)
+
+    forward(a)
+    left(120)
+
+    forward(a)
+
+    end_fill()  # Fini le remplissage
 
 
+def dessine_solution(a, n):  # Fonction qui crée la forme finale
+    """Fonction qui trace la figure final
 
-def rec(n, a):
-    if n == 1:
-        penup()
-        forward(a*2)
-        left(120)
-        pendown()
+    :param int a: taille du côté d'un triangle (doit être pair)
+    :param int n: taille de la solution finale
+    :return: La solution finale
+    """
+
+    milieu = sqrt(((a * (2 ** n)) ** 2) - ((a * (2 ** (n - 1))) ** 2))  # Permet de se positionner au milieu de la base puis à la moitié du côté (Pythagore)
+
+    if n == 1:  # Cas d'arrêt de la fonction récursive qui consiste à se placer et tracer le premier trapeze
+
+        up()
+        left(30)
+
+        forward(milieu)
+        left(90)
+
+        down()
+
+        # On trace le trapèze
         trapeze(a)
-    else:
-        penup()
-        forward((2**n)*a)
-        left(120)
-        forward((((2 ** n) * a)/2)-a)
-        pendown()
-        trapeze(a)
-        penup()
-        left(180)
-        forward((((2 ** n) * a) / 2) - a)
-        right(180)
-        forward((2 ** n) * a)
-        left(180)
-        pendown()
-        rec(n-1, a)
 
+        up()
 
+        left(90)
+        forward(milieu)
 
-petit_trapezez(a)
-sleep(10000)
+        right(210)
+
+    else:  # Cas récursif pour positionner et tracer les solutions
+
+        dessine_solution(a, n - 1)  # Crée le premier trapèze base
+
+        up()  # Lève le stylo pour se positioner
+
+        left(30)
+        forward(milieu)
+
+        left(90)
+
+        down()  # Positionnement terminé, traçage
+
+        trapeze(a)  # Créer les différents trapèzes
+
+        dessine_solution(a, n - 1)  # traçe le premier trapèze collé à la base
+        left(60)  # Se positionne pour le trapèze suivant
+
+        dessine_solution(a, n - 1)  # traçe le deuxième trapèze collé à la base
+        left(60)  # Se positionne pour le trapèze suivan
+
+        dessine_solution(a, n - 1)  # traçe le troisième trapèze collé à la base
+        right(30)  # Se positionne pour le trapèze suivan
+
+        forward(milieu)
+        right(210)  # Se repositionne
+
+dessine_solution(30, 4)
+time.sleep(6000)
